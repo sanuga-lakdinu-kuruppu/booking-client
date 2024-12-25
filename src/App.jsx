@@ -28,7 +28,6 @@ function App() {
 
             <div className="flex items-center space-x-2">
               <FaUserCircle className="text-white text-2xl cursor-pointer hover:text-yellow-500 transition duration-200" />
-              <span className="text-white text-sm">Malith Perera</span>
             </div>
           </div>
         </div>

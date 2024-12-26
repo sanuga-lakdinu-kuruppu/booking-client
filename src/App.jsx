@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./components/pages/home/HomePage";
 import { ToastContainer } from "react-toastify";
-import CommuterFlow from "./components/pages/commuter/commuterPage";
+import CommuterFlow from "./components/pages/commuter/CommuterPage";
 import MakeReservation from "./components/pages/commuter/MakeReservation";
 import CommuterRegistration from "./components/pages/commuter/CommuterRegistration";
 

@@ -69,7 +69,7 @@ const TripCard = ({ trip }) => {
             <strong>Booking Status:</strong>{" "}
             <span
               className={`${
-                trip.bookingStatus === "EANABLED"
+                trip.bookingStatus === "ENABLED"
                   ? "text-green-500"
                   : trip.bookingStatus === "SOLD_OUT"
                   ? "text-yellow-500"

@@ -23,7 +23,9 @@ const MakeReservation = () => {
         const response = await axios.get(`${CORE_SERVICE_BASE_URL}/stations`);
         setLocations(response.data);
       } catch (error) {
-        console.error("Error fetching locations:", error);
+        const errorMessage =
+          error.response?.data?.error || "An unexpected error occurred.";
+        toast.error(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -51,13 +53,14 @@ const MakeReservation = () => {
         setTrips(response.data);
         console.log("Response Data: ", response.data);
       } else {
-        const errorMessage = response.data?.error || "An error occurred!";
+        const errorMessage =
+          response?.data?.error || "An unexpected error occurred.";
         toast.error(errorMessage);
-        console.log(`Error: ${response.status}, ${errorMessage}`);
       }
     } catch (error) {
-      toast.error(`Failed: ${error.message}`);
-      console.error("Error fetching trips:", error);
+      const errorMessage =
+        error.response?.data?.error || "An unexpected error occurred.";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

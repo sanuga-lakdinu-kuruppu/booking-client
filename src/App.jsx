@@ -5,6 +5,7 @@ import CommuterFlow from "./components/pages/commuter/CommuterPage";
 import MakeReservation from "./components/pages/commuter/MakeReservation";
 import CommuterRegistration from "./components/pages/commuter/CommuterRegistration";
 import ViewReservation from "./components/pages/commuter/ViewReservationPage";
+import BookingCancellationPage from "./components/pages/commuter/BookingCancellationPage";
 
 function App() {
   return (
@@ -35,6 +36,10 @@ function App() {
         <Route
           path="/commuter/view-reservations"
           element={<ViewReservation />}
+        />
+        <Route
+          path="/commuter/cancel-reservations"
+          element={<BookingCancellationPage />}
         />
       </Routes>
     </Router>

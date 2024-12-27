@@ -170,6 +170,7 @@ const CommuterRegistration = () => {
         setIsLoading(false);
       }
     } else if (step === 3) {
+      setIsLoading(true);
       try {
         const response = await axios.post(
           `${BOOKING_SERVICE_BASE_URL}/booking-payments`,
@@ -179,7 +180,7 @@ const CommuterRegistration = () => {
         );
         const { redirectUrl } = response.data;
         if (redirectUrl) {
-          window.location.href = redirectUrl;
+          window.open(redirectUrl, "_blank");
         } else {
           toast.error("Redirect URL is not available.");
         }

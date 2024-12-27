@@ -6,6 +6,7 @@ import MakeReservation from "./components/pages/commuter/MakeReservation";
 import CommuterRegistration from "./components/pages/commuter/CommuterRegistration";
 import ViewReservation from "./components/pages/commuter/ViewReservationPage";
 import BookingCancellationPage from "./components/pages/commuter/BookingCancellationPage";
+import Login from "./components/pages/authentication/LoginPage";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           path="/commuter/cancel-reservations"
           element={<BookingCancellationPage />}
         />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   );

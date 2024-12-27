@@ -180,7 +180,7 @@ const CommuterRegistration = () => {
         );
         const { redirectUrl } = response.data;
         if (redirectUrl) {
-          window.open(redirectUrl, "_blank");
+          window.location.href = redirectUrl;
         } else {
           toast.error("Redirect URL is not available.");
         }

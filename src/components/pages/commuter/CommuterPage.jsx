@@ -29,7 +29,7 @@ const CommuterFlow = () => {
             title="View Reservations"
             description="Check the details of your existing bookings."
             Icon={FaClipboardList}
-            onClick={() => console.log("Navigate to View Reservations page")}
+            onClick={() => navigate("/commuter/view-reservations")}
           />
           <HomeCard
             title="Cancel Reservations"

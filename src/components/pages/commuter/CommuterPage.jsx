@@ -12,7 +12,7 @@ const CommuterFlow = () => {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100">
-      <main className="container mx-auto p-6 flex-1 space-y-8">
+      <main className="container mx-auto p-4 flex-1 space-y-8">
         <Header
           title="Daily Commuter Flows"
           tag="No authentication needed for commuter activities"

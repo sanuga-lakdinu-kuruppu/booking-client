@@ -5,7 +5,7 @@ import { IoArrowBack } from "react-icons/io5";
 const NavBar = ({ mode, title }) => {
   return (
     <header className="bg-gray-800 shadow-lg">
-      <div className="container mx-auto p-6 flex items-center justify-between">
+      <div className="container mx-auto p-4 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           {mode === 1 && <img src="/bus.png" alt="Logo" className="w-8 h-8" />}
           {mode === 2 && (

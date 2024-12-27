@@ -8,7 +8,11 @@ import ViewReservation from "./components/pages/commuter/ViewReservationPage";
 import BookingCancellationPage from "./components/pages/commuter/BookingCancellationPage";
 import Login from "./components/pages/authentication/LoginPage";
 import ProtectedRoute from "./routes/protectedRoutes";
-import OperatorPage from "./components/pages/operator/OperatorPage";
+import TicketScanPage from "./components/pages/operator/TicketScanPage";
+import OperatorHomePage from "./components/pages/operator/OperatorHomePage";
+import NtcHomePage from "./components/pages/ntc/NtcHomePage";
+import StationPage from "./components/pages/ntc/StationPage";
+import PolicyPage from "./components/pages/ntc/PolicyPage";
 
 function App() {
   return (
@@ -49,9 +53,36 @@ function App() {
           path="/operator"
           element={
             <ProtectedRoute
-              element={OperatorPage}
+              element={OperatorHomePage}
               allowedRoles={["NTC_USER"]}
             />
+          }
+        />
+        <Route
+          path="/operator/ticket"
+          element={
+            <ProtectedRoute
+              element={TicketScanPage}
+              allowedRoles={["NTC_USER"]}
+            />
+          }
+        />
+        <Route
+          path="/ntc"
+          element={
+            <ProtectedRoute element={NtcHomePage} allowedRoles={["NTC_USER"]} />
+          }
+        />
+        <Route
+          path="/ntc/stations"
+          element={
+            <ProtectedRoute element={StationPage} allowedRoles={["NTC_USER"]} />
+          }
+        />{" "}
+        <Route
+          path="/ntc/policies"
+          element={
+            <ProtectedRoute element={PolicyPage} allowedRoles={["NTC_USER"]} />
           }
         />
       </Routes>

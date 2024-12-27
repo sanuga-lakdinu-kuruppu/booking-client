@@ -1,5 +1,5 @@
 import { FaRegCheckCircle, FaLock, FaUserCog, FaUsers } from "react-icons/fa";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import HomeCard from "../../widgets/homeCard";
 import Header from "../../widgets/header";
@@ -25,7 +25,7 @@ const HomePage = () => {
       />
       <NavBar mode={1} title="Busriya.com .. ." />
 
-      <main className="container mx-auto p-6 flex-1 space-y-8">
+      <main className="container mx-auto p-4 flex-1 space-y-8">
         <Header
           title="Welcome to the Bus Booking System"
           tag=" Plan your trip and book your tickets easily. Select your starting
@@ -56,18 +56,16 @@ const HomePage = () => {
           />
 
           <HomeCard
-            title={`NTC Admin Flow ${
-              role === "COMMUTER" ? "LOCKED" : ""
-            }`}
+            title={`NTC Admin Flow ${role === "COMMUTER" ? "LOCKED" : ""}`}
             description="Master data handling for the busriya.com"
             Icon={FaUsers}
-            onClick={() => toast.success("Daily Commuter Flow clicked!")}
+            onClick={() => navigate("/ntc")}
             disabled={role === "COMMUTER"}
           />
         </div>
       </main>
 
-      <footer className="bg-gray-800 p-4 text-center text-gray-400 text-sm mt-auto">
+      <footer className="bg-gray-800 p-2 text-center text-gray-400 text-sm mt-auto">
         © 2024 Busriya.com. All rights reserved.
       </footer>
     </div>

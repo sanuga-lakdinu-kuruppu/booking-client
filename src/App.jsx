@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import CommuterFlow from "./components/pages/commuter/CommuterPage";
 import MakeReservation from "./components/pages/commuter/MakeReservation";
 import CommuterRegistration from "./components/pages/commuter/CommuterRegistration";
+import ViewReservation from "./components/pages/commuter/ViewReservationPage";
 
 function App() {
   return (
@@ -30,6 +31,10 @@ function App() {
         <Route
           path="/commuter/make-reservations/register/:tripId"
           element={<CommuterRegistration />}
+        />
+        <Route
+          path="/commuter/view-reservations"
+          element={<ViewReservation />}
         />
       </Routes>
     </Router>

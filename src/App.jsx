@@ -7,6 +7,8 @@ import CommuterRegistration from "./components/pages/commuter/CommuterRegistrati
 import ViewReservation from "./components/pages/commuter/ViewReservationPage";
 import BookingCancellationPage from "./components/pages/commuter/BookingCancellationPage";
 import Login from "./components/pages/authentication/LoginPage";
+import ProtectedRoute from "./routes/protectedRoutes";
+import OperatorPage from "./components/pages/operator/OperatorPage";
 
 function App() {
   return (
@@ -43,6 +45,15 @@ function App() {
           element={<BookingCancellationPage />}
         />
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/operator"
+          element={
+            <ProtectedRoute
+              element={OperatorPage}
+              allowedRoles={["NTC_USER"]}
+            />
+          }
+        />
       </Routes>
     </Router>
   );

@@ -81,7 +81,7 @@ const MakeReservation = () => {
         pauseOnHover
         theme="colored"
       />
-      <main className="container mx-auto p-6 flex-1 space-y-8">
+      <main className="container mx-auto p-4 flex-1 space-y-8">
         <Header
           title="Trips Available"
           tag="Choose your trip details and find your trip"

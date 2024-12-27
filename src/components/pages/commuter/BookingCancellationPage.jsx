@@ -100,7 +100,7 @@ const BookingCancellationPage = () => {
         pauseOnHover
         theme="colored"
       />
-      <main className="container mx-auto p-6 flex-1 space-y-8">
+      <main className="container mx-auto p-4 flex-1 space-y-8">
         <Header title="Cancel Reservations" tag="" />{" "}
         <div className="grid grid-cols-12 gap-6">
           {!verificationId && !verification ? (

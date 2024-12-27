@@ -4,8 +4,10 @@ import { useNavigate } from "react-router-dom";
 import HomeCard from "../../widgets/homeCard";
 import Header from "../../widgets/header";
 import NavBar from "../../widgets/navbar";
+import { useAuth } from "../../../context/AuthContext";
 
 const HomePage = () => {
+  const { role } = useAuth();
   const navigate = useNavigate();
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100">
@@ -46,17 +48,21 @@ const HomePage = () => {
           />
 
           <HomeCard
-            title="Bus Operator Flow"
+            title={`Bus Operator Flow ${role === "COMMUTER" ? "LOCKED" : ""}`}
             description=" Manage currently working vehicles and workers"
             Icon={FaUserCog}
-            onClick={() => toast.success("Daily Commuter Flow clicked!")}
+            onClick={() => navigate("/operator")}
+            disabled={role === "COMMUTER"}
           />
 
           <HomeCard
-            title="NTC Administrator Flow"
+            title={`NTC Admin Flow ${
+              role === "COMMUTER" ? "LOCKED" : ""
+            }`}
             description="Master data handling for the busriya.com"
             Icon={FaUsers}
             onClick={() => toast.success("Daily Commuter Flow clicked!")}
+            disabled={role === "COMMUTER"}
           />
         </div>
       </main>

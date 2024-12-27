@@ -156,7 +156,12 @@ const MakeReservation = () => {
               <div className="relative mt-9">
                 <button
                   onClick={handleFindTrips}
-                  className="bg-yellow-500 text-white py-4 w-full rounded-md hover:bg-yellow-600 transition duration-200"
+                  disabled={loading}
+                  className={`w-full px-6 py-2 rounded-lg focus:outline-none focus:ring-2 transform transition-all duration-300 ease-in-out ${
+                    loading
+                      ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                      : "bg-yellow-500 text-white hover:bg-yellow-400 focus:ring-yellow-500"
+                  }`}
                 >
                   Find Trips
                 </button>

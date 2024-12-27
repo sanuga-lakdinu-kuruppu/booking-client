@@ -35,7 +35,7 @@ const CommuterFlow = () => {
             title="Cancel Reservations"
             description="Manage your bookings by canceling if needed."
             Icon={FaTimesCircle}
-            onClick={() => console.log("Navigate to Cancel Reservations page")}
+            onClick={() => navigate("/commuter/cancel-reservations")}
           />
           <HomeCard
             title="Lost & Found"

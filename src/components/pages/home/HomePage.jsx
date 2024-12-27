@@ -35,7 +35,7 @@ const HomePage = () => {
             title="Authentication Flow"
             description="User login for different roles in the busriya.com"
             Icon={FaLock}
-            onClick={() => toast.success("Daily Commuter Flow clicked!")}
+            onClick={() => navigate("/login")}
           />
 
           <HomeCard

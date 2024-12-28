@@ -9,6 +9,7 @@ import {
   FaCalendarCheck,
   FaRoute,
   FaCalendarAlt,
+  FaBoxOpen,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import HomeCard from "../../widgets/homeCard";
@@ -103,8 +104,18 @@ const NtcHomePage = () => {
             onClick={() => navigate("/ntc/schedules")}
             tag="Schedule Management"
           />
+          <HomeCard
+            title="Lost Parcels"
+            description="Manage lost parcels"
+            Icon={FaBoxOpen}
+            onClick={() => navigate("/ntc/lost-parcels")}
+            tag="Lost Parcel Management"
+          />
         </div>
       </main>
+      <footer className="bg-gray-800 p-2 text-center text-gray-400 text-sm mt-auto">
+        © 2024 Busriya.com. All rights reserved.
+      </footer>
     </div>
   );
 };

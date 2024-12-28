@@ -361,6 +361,7 @@ const TripPage = () => {
             </div>
           </form>
         )}
+
         <div className="overflow-x-auto rounded-lg shadow-lg mt-8">
           <table className="min-w-full bg-gray-800 border border-gray-700 rounded-lg">
             <thead className="bg-gray-700">

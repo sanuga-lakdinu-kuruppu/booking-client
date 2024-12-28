@@ -38,13 +38,16 @@ const CommuterFlow = () => {
             onClick={() => navigate("/commuter/cancel-reservations")}
           />
           <HomeCard
-            title="Lost & Found"
-            description="Report or search for items lost during your commute."
+            title="Lost & Found [Complain]"
+            description="Report for items lost during your commute."
             Icon={FaBoxOpen}
-            onClick={() => console.log("Navigate to Lost & Found page")}
+            onClick={() => navigate("/commuter/lost-parcels/create")}
           />
         </div>
       </main>
+      <footer className="bg-gray-800 p-2 text-center text-gray-400 text-sm mt-auto">
+        © 2024 Busriya.com. All rights reserved.
+      </footer>
     </div>
   );
 };

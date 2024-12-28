@@ -8,7 +8,7 @@ const HomeCard = ({ title, description, Icon, onClick, disabled }) => {
           ? "bg-gray-700 cursor-not-allowed"
           : "bg-gray-800 hover:bg-gray-700"
       }`}
-      onClick={!disabled ? onClick : undefined} 
+      onClick={!disabled ? onClick : undefined}
     >
       <div className="flex justify-between items-center">
         {Icon && (
@@ -42,11 +42,7 @@ HomeCard.propTypes = {
   description: PropTypes.string.isRequired,
   Icon: PropTypes.elementType.isRequired,
   onClick: PropTypes.func.isRequired,
-  disabled: PropTypes.bool, 
-};
-
-HomeCard.defaultProps = {
-  disabled: false,
+  disabled: PropTypes.bool,
 };
 
 export default HomeCard;

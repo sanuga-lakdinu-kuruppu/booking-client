@@ -111,7 +111,7 @@ const BookingCancellationPage = () => {
                   E Ticket Verification
                 </h3>
                 <p className="mt-2 text-gray-400 leading-relaxed text-sm">
-                  Please enter your E ticket for getting the ticket details
+                  Please enter your E ticket for cancel the booking
                 </p>
                 <div className="flex mb-4 mt-8">
                   <div className="w-1/2 pr-2">
@@ -208,6 +208,9 @@ const BookingCancellationPage = () => {
           )}
         </div>
       </main>
+      <footer className="bg-gray-800 p-2 text-center text-gray-400 text-sm mt-auto">
+        © 2024 Busriya.com. All rights reserved.
+      </footer>
     </div>
   );
 };

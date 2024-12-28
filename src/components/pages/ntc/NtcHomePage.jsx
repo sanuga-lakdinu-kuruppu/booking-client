@@ -6,6 +6,8 @@ import {
   FaMapMarkedAlt,
   FaCar,
   FaIdCard,
+  FaCalendarCheck,
+  FaRoute,
   FaCalendarAlt,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +25,28 @@ const NtcHomePage = () => {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <HomeCard
+            title="Trips"
+            description="Manage trips"
+            Icon={FaRoute}
+            onClick={() => navigate("/ntc/trips")}
+            tag="Trips Management"
+          />
+          <HomeCard
+            title="Booking"
+            description="Manage Booking"
+            Icon={FaCalendarCheck}
+            onClick={() => navigate("/ntc/bookings")}
+            tag="Booking Management"
+          />
+
+          <HomeCard
+            title="Bus Stations"
+            description="Manage bus stations and related data"
+            Icon={FaMapMarkedAlt}
+            onClick={() => navigate("/ntc/stations")}
+            tag="Stations Management"
+          />
           <HomeCard
             title="Bus Stations"
             description="Manage bus stations and related data"

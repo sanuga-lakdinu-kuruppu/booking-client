@@ -21,6 +21,8 @@ import PermitPage from "./components/pages/ntc/PermitPage";
 import SchedulePage from "./components/pages/ntc/SchedulePage";
 import TripPage from "./components/pages/ntc/TripPage";
 import BookingPage from "./components/pages/ntc/BookingPage";
+import LostParcelCreationPage from "./components/pages/commuter/LostParcelCreation";
+import LostParcelAdminPage from "./components/pages/ntc/LostParcelAdminPage";
 
 function App() {
   return (
@@ -55,6 +57,10 @@ function App() {
         <Route
           path="/commuter/cancel-reservations"
           element={<BookingCancellationPage />}
+        />
+        <Route
+          path="/commuter/lost-parcels/create"
+          element={<LostParcelCreationPage />}
         />
         <Route path="/login" element={<Login />} />
         <Route
@@ -145,6 +151,15 @@ function App() {
           path="/ntc/bookings"
           element={
             <ProtectedRoute element={BookingPage} allowedRoles={["NTC_USER"]} />
+          }
+        />
+        <Route
+          path="/ntc/lost-parcels"
+          element={
+            <ProtectedRoute
+              element={LostParcelAdminPage}
+              allowedRoles={["NTC_USER"]}
+            />
           }
         />
       </Routes>

@@ -480,7 +480,7 @@ const VehiclePage = () => {
             <div className="col-span-2 flex justify-end space-x-4">
               <button
                 type="button"
-                onClick={() => setShowUpdateForm(false)}
+                onClick={() => setShowAddForm(false)}
                 disabled={loading}
                 className="px-6 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-200"
               >

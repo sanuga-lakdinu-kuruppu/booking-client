@@ -16,6 +16,7 @@ import PolicyPage from "./components/pages/ntc/PolicyPage";
 import RoutePage from "./components/pages/ntc/RoutePage";
 import OperatorPage from "./components/pages/ntc/OperatorPage";
 import VehiclePage from "./components/pages/ntc/VehiclePage";
+import WorkerPage from "./components/pages/ntc/WorkerPage";
 
 function App() {
   return (
@@ -107,6 +108,12 @@ function App() {
           path="/ntc/vehicles"
           element={
             <ProtectedRoute element={VehiclePage} allowedRoles={["NTC_USER"]} />
+          }
+        />
+        <Route
+          path="/ntc/workers"
+          element={
+            <ProtectedRoute element={WorkerPage} allowedRoles={["NTC_USER"]} />
           }
         />
       </Routes>

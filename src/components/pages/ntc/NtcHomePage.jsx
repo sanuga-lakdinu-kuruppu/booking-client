@@ -47,13 +47,6 @@ const NtcHomePage = () => {
             onClick={() => navigate("/ntc/stations")}
             tag="Stations Management"
           />
-          <HomeCard
-            title="Bus Stations"
-            description="Manage bus stations and related data"
-            Icon={FaMapMarkedAlt}
-            onClick={() => navigate("/ntc/stations")}
-            tag="Stations Management"
-          />
 
           <HomeCard
             title="Policies"

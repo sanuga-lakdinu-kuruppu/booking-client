@@ -15,13 +15,19 @@ const RoutePage = () => {
   const [locations, setLocations] = useState([]);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [selectedRoute, setSelectedRoute] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchLocations = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${CORE_SERVICE_BASE_URL}/stations`);
-        setLocations(response.data);
+        const response = await axios.get(`${CORE_SERVICE_BASE_URL}/stations`, {
+          params: {
+            all: true,
+          },
+        });
+        setLocations(response.data.data);
       } catch (error) {
         const errorMessage =
           error.response?.data?.error || "An unexpected error occurred.";
@@ -34,22 +40,29 @@ const RoutePage = () => {
     fetchLocations();
   }, []);
 
-  useEffect(() => {
-    const fetchLocations = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`${CORE_SERVICE_BASE_URL}/routes`);
-        setRoutes(response.data);
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.error || "An unexpected error occurred.";
-        toast.error(errorMessage);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchRoutes = async (page = 1) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${CORE_SERVICE_BASE_URL}/routes`, {
+        params: {
+          page,
+          limit: 10,
+        },
+      });
+      setRoutes(response.data.data);
+      setCurrentPage(response.data.currentPage);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || "An unexpected error occurred.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchLocations();
+  useEffect(() => {
+    fetchRoutes();
   }, []);
 
   const handleAddStation = async (e) => {
@@ -168,6 +181,11 @@ const RoutePage = () => {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    fetchRoutes(newPage);
   };
 
   return (
@@ -484,6 +502,23 @@ const RoutePage = () => {
               ))}
             </tbody>
           </table>
+          <div className="pagination-controls mt-4 flex justify-center space-x-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </main>
       <footer className="bg-gray-800 p-2 text-center text-gray-400 text-sm mt-auto">

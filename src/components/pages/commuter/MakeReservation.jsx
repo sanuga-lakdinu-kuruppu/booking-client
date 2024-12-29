@@ -20,8 +20,12 @@ const MakeReservation = () => {
     const fetchLocations = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${CORE_SERVICE_BASE_URL}/stations`);
-        setLocations(response.data);
+        const response = await axios.get(`${CORE_SERVICE_BASE_URL}/stations`, {
+          params: {
+            all: true,
+          },
+        });
+        setLocations(response.data.data);
       } catch (error) {
         const errorMessage =
           error.response?.data?.error || "An unexpected error occurred.";

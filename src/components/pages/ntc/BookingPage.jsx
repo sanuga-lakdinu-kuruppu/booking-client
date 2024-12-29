@@ -11,31 +11,41 @@ const BookingPage = () => {
   const { token } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const fetchBookings = async (page = 1) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${BOOKING_SERVICE_BASE_URL}/bookings`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page,
+          limit: 10,
+        },
+      });
+      setBookings(response.data.data);
+      setCurrentPage(response.data.currentPage);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || "An unexpected error occurred.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${BOOKING_SERVICE_BASE_URL}/bookings`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setBookings(response.data);
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.error || "An unexpected error occurred.";
-        toast.error(errorMessage);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchBookings();
   }, []);
+
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    fetchBookings(newPage);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100">
@@ -145,6 +155,23 @@ const BookingPage = () => {
                 ))}
               </tbody>
             </table>
+            <div className="pagination-controls mt-4 flex justify-center space-x-2">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
       </main>

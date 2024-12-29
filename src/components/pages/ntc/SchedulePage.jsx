@@ -13,6 +13,25 @@ const SchedulePage = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newSchedule, setNewSchedule] = useState({});
   const [permits, setPermits] = useState([]);
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${CORE_SERVICE_BASE_URL}/stations`);
+        setLocations(response.data);
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.error || "An unexpected error occurred.";
+        toast.error(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLocations();
+  }, []);
 
   const getPermitDetails = async (permitId) => {
     try {
@@ -83,12 +102,11 @@ const SchedulePage = () => {
       const {
         route: { routeId },
       } = await getPermitDetails(newSchedule.permit);
-      const thisRoute = await getRouteDetails(routeId);
       const request = {
         permit: Number(newSchedule.permit),
         route: Number(routeId),
-        startLocation: Number(thisRoute.startLocation.stationId),
-        endLocation: Number(thisRoute.endLocation.stationId),
+        startLocation: Number(newSchedule.startLocation),
+        endLocation: Number(newSchedule.endLocation),
         departureTime: newSchedule.departureTime,
         arrivalTime: newSchedule.arrivalTime,
       };
@@ -190,6 +208,38 @@ const SchedulePage = () => {
                 {permits.map((permit) => (
                   <option key={permit.permitId} value={Number(permit.permitId)}>
                     {permit.permitNumber} [{permit.route.routeNumber}]
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col">
+              <label className="text-gray-200 mb-2">Start Location</label>
+              <select
+                name="startLocation"
+                value={newSchedule.startLocation}
+                onChange={handleInputChange}
+                className="px-4 py-2 text-black rounded-md focus:outline-none"
+              >
+                <option value="">Select Start Location</option>
+                {locations.map((location) => (
+                  <option key={location.id} value={location.stationId}>
+                    {location.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col">
+              <label className="text-gray-200 mb-2">End Location</label>
+              <select
+                name="endLocation"
+                value={newSchedule.endLocation}
+                onChange={handleInputChange}
+                className="px-4 py-2 text-black rounded-md focus:outline-none"
+              >
+                <option value="">Select End Location</option>
+                {locations.map((location) => (
+                  <option key={location.id} value={location.stationId}>
+                    {location.name}
                   </option>
                 ))}
               </select>

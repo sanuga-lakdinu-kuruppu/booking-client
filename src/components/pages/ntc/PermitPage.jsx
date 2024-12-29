@@ -14,27 +14,22 @@ const PermitPage = () => {
   const [newPermit, setNewPermit] = useState({});
   const [routes, setRoutes] = useState([]);
   const [vehicles, setVehicles] = useState([]);
-  const [operators, setOperators] = useState([]);
 
-  useEffect(() => {
-    const fetchOperators = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${CORE_SERVICE_BASE_URL}/bus-operators`
-        );
-        setOperators(response.data);
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.error || "An unexpected error occurred.";
-        toast.error(errorMessage);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOperators();
-  }, []);
+  const fetchVehicleDetails = async (vehicleId) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${CORE_SERVICE_BASE_URL}/vehicles/${vehicleId}`
+      );
+      return response.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || "An unexpected error occurred.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -94,13 +89,14 @@ const PermitPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
+      const thisVehicle = await fetchVehicleDetails(newPermit.vehicle);
       const request = {
         permitNumber: newPermit.permitNumber,
         issueDate: newPermit.issueDate,
         expiryDate: newPermit.expiryDate,
         route: Number(newPermit.route),
         vehicle: Number(newPermit.vehicle),
-        busOperator: Number(newPermit.busOperator),
+        busOperator: Number(thisVehicle.busOperator.operatorId),
       };
       console.log(`${JSON.stringify(request)}`);
       const response = await axios.post(
@@ -244,22 +240,6 @@ const PermitPage = () => {
                 {vehicles.map((vehicle) => (
                   <option key={vehicle.vehicleId} value={vehicle.vehicleId}>
                     {vehicle.model} [{vehicle.registrationNumber}]
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex flex-col">
-              <label className="text-gray-200 mb-2">Bus Operator</label>
-              <select
-                name="busOperator"
-                value={newPermit.busOperator}
-                onChange={handleInputChange}
-                className="px-4 py-2 text-black rounded-md focus:outline-none"
-              >
-                <option value="">Select the operator</option>
-                {operators.map((operator) => (
-                  <option key={operator.operatorId} value={operator.operatorId}>
-                    {operator.company}
                   </option>
                 ))}
               </select>

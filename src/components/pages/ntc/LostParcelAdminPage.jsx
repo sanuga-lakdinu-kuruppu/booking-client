@@ -13,29 +13,37 @@ const LostParcelAdminPage = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [request, setRequest] = useState({});
   const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const fetchParcels = async (page = 1) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${BOOKING_SERVICE_BASE_URL}/lost-parcels`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            page,
+            limit: 10,
+          },
+        }
+      );
+      setParcels(response.data.data);
+      setCurrentPage(response.data.currentPage);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || "An unexpected error occurred.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchParcels = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `${BOOKING_SERVICE_BASE_URL}/lost-parcels`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setParcels(response.data);
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.error || "An unexpected error occurred.";
-        toast.error(errorMessage);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchParcels();
   }, []);
 
@@ -51,7 +59,6 @@ const LostParcelAdminPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      console.log("klsajflkj");
       const response = await axios.patch(
         `${BOOKING_SERVICE_BASE_URL}/lost-parcels/${selectedParcel.parcelId}`,
         request,
@@ -82,6 +89,11 @@ const LostParcelAdminPage = () => {
   const handleUpdate = (parcel) => {
     setSelectedParcel(parcel);
     setShowUpdateForm(true);
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    fetchParcels(newPage);
   };
 
   return (
@@ -291,6 +303,23 @@ const LostParcelAdminPage = () => {
               ))}
             </tbody>
           </table>
+          <div className="pagination-controls mt-4 flex justify-center space-x-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </main>
     </div>

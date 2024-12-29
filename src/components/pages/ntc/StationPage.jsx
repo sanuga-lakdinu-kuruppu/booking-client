@@ -14,22 +14,31 @@ const StationPage = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [selectedStation, setSelectedStation] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const fetchLocations = async (page = 1) => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${CORE_SERVICE_BASE_URL}/stations`, {
+        params: {
+          page,
+          limit: 10,
+        },
+      });
+      setStations(response.data.data);
+      setCurrentPage(response.data.currentPage);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || "An unexpected error occurred.";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchLocations = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`${CORE_SERVICE_BASE_URL}/stations`);
-        setStations(response.data);
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.error || "An unexpected error occurred.";
-        toast.error(errorMessage);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchLocations();
   }, []);
 
@@ -142,6 +151,11 @@ const StationPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    fetchLocations(newPage);
   };
 
   return (
@@ -366,6 +380,23 @@ const StationPage = () => {
               ))}
             </tbody>
           </table>
+          <div className="pagination-controls mt-4 flex justify-center space-x-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </main>
       <footer className="bg-gray-800 p-2 text-center text-gray-400 text-sm mt-auto">

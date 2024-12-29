@@ -15,6 +15,8 @@ const TripPage = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const [workers, setWorkers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const getVehicleDetails = async (vehicleId) => {
     try {
@@ -60,9 +62,14 @@ const TripPage = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${CORE_SERVICE_BASE_URL}/bus-workers`
+          `${CORE_SERVICE_BASE_URL}/bus-workers`,
+          {
+            params: {
+              all: true,
+            },
+          }
         );
-        setWorkers(response.data);
+        setWorkers(response.data.data);
       } catch (error) {
         const errorMessage =
           error.response?.data?.error || "An unexpected error occurred.";
@@ -79,8 +86,12 @@ const TripPage = () => {
     const fetchSchedules = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`${CORE_SERVICE_BASE_URL}/schedules`);
-        setSchedules(response.data);
+        const response = await axios.get(`${CORE_SERVICE_BASE_URL}/schedules`, {
+          params: {
+            all: true,
+          },
+        });
+        setSchedules(response.data.data);
       } catch (error) {
         const errorMessage =
           error.response?.data?.error || "An unexpected error occurred.";
@@ -93,16 +104,22 @@ const TripPage = () => {
     fetchSchedules();
   }, []);
 
-  const fetchTripsForRefresh = async () => {
+  const fetchTrips = async (page = 1) => {
     setLoading(true);
     try {
       const response = await axios.get(`${TRIP_SERVICE_BASE_URL}/trips`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        params: {
+          page,
+          limit: 10,
+        },
       });
-      setTrips(response.data);
-      toast.success("Trip fetched successfully :)");
+
+      setTrips(response.data.data);
+      setCurrentPage(response.data.currentPage);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       const errorMessage =
         error.response?.data?.error || "An unexpected error occurred.";
@@ -113,24 +130,6 @@ const TripPage = () => {
   };
 
   useEffect(() => {
-    const fetchTrips = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`${TRIP_SERVICE_BASE_URL}/trips`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setTrips(response.data);
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.error || "An unexpected error occurred.";
-        toast.error(errorMessage);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchTrips();
   }, []);
 
@@ -239,6 +238,11 @@ const TripPage = () => {
     }
   };
 
+  const handlePageChange = (newPage) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    fetchTrips(newPage);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100">
       <ToastContainer
@@ -267,7 +271,7 @@ const TripPage = () => {
             New Trip
           </button>
           <button
-            onClick={fetchTripsForRefresh}
+            onClick={fetchTrips}
             disabled={loading}
             className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-200"
           >
@@ -507,6 +511,23 @@ const TripPage = () => {
               ))}
             </tbody>
           </table>
+          <div className="pagination-controls mt-4 flex justify-center space-x-2">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="px-4 py-2">{`Page ${currentPage} of ${totalPages}`}</span>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </main>
       <footer className="bg-gray-800 p-2 text-center text-gray-400 text-sm mt-auto">

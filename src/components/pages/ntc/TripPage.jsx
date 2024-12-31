@@ -17,6 +17,33 @@ const TripPage = () => {
   const [workers, setWorkers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [routes, setRoutes] = useState([]);
+  const [selectedRoute, setSelectedRoute] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+
+  useEffect(() => {
+    const fetchRoutes = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${CORE_SERVICE_BASE_URL}/routes`, {
+          params: {
+            all: true,
+          },
+        });
+        setRoutes(response.data.data);
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.error || "An unexpected error occurred.";
+        toast.error(errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoutes();
+  }, []);
 
   const getVehicleDetails = async (vehicleId) => {
     try {
@@ -104,17 +131,44 @@ const TripPage = () => {
     fetchSchedules();
   }, []);
 
-  const fetchTrips = async (page = 1) => {
+  const handleRouteChange = (e) => {
+    const newRoute = e.target.value;
+    setSelectedRoute(newRoute);
+    setCurrentPage(1);
+    fetchTrips(1, newRoute, selectedDate);
+  };
+
+  const handleDateChange = (e) => {
+    const newDate = e.target.value;
+    setSelectedDate(newDate);
+    setCurrentPage(1);
+    fetchTrips(1, selectedRoute, newDate);
+  };
+
+  const fetchTrips = async (
+    page = 1,
+    route = selectedRoute,
+    date = selectedDate
+  ) => {
     setLoading(true);
     try {
+      let params = {
+        page,
+        limit: 10,
+      };
+
+      if (date) {
+        params.tripDate = date;
+      }
+      if (route) {
+        params.routeId = Number(route);
+      }
+
       const response = await axios.get(`${TRIP_SERVICE_BASE_URL}/trips`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        params: {
-          page,
-          limit: 10,
-        },
+        params: params,
       });
 
       setTrips(response.data.data);
@@ -365,8 +419,48 @@ const TripPage = () => {
             </div>
           </form>
         )}
-
         <div className="overflow-x-auto rounded-lg shadow-lg mt-8">
+          <div className="flex flex-row w-full sm:w-full text-sm mb-4 space-x-4">
+            {" "}
+            {/* Horizontal filter layout */}
+            <div className="flex flex-col w-full sm:w-1/4 text-sm">
+              <label htmlFor="from" className="text-gray-400">
+                Route
+              </label>
+              <div className="relative mt-4">
+                <select
+                  id="selectedRoute"
+                  value={selectedRoute}
+                  onChange={handleRouteChange}
+                  className="bg-gray-700 text-white p-4 pl-8 pr-8 rounded-md appearance-none w-full"
+                >
+                  <option value="">Select a route</option>
+                  {routes.map((route) => (
+                    <option key={route.routeId} value={Number(route.routeId)}>
+                      {route.routeName} [{route.routeNumber}]
+                    </option>
+                  ))}
+                </select>
+                <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400">
+                  &#9662;
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col w-full sm:w-1/4 text-sm">
+              <label htmlFor="date" className="text-gray-400">
+                Trip Date
+              </label>
+              <div className="relative mt-4">
+                <input
+                  type="date"
+                  id="selectedDate"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  className="bg-gray-700 text-white p-4 rounded-md w-full"
+                />
+              </div>
+            </div>
+          </div>
           <table className="min-w-full bg-gray-800 border border-gray-700 rounded-lg">
             <thead className="bg-gray-700">
               <tr>
